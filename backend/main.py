@@ -1,9 +1,10 @@
-
-from urllib import response
+from fastapi import Request
 from fastapi import FastAPI, HTTPException
 from fastapi import status as statuscode
 from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates
 from model import DemoQuestion, User, Car
+import pandas as pd
 
 from database import (
     fetch_one_question,
@@ -13,6 +14,7 @@ from database import (
     start_the_challenge,
     fetch_all_cars,
     end_the_challenge,
+    fetch_leaderboard_users,
 )
 
 from fastapi.middleware.cors import CORSMiddleware
@@ -93,9 +95,17 @@ async def end_challenge(userid: str):
         return response
     raise HTTPException(404, f"Can't signal end of challenge for user {userid}")
          
+templates = Jinja2Templates(directory="data")
+app.mount("/template", StaticFiles(directory="data"),name="template")
+
 @app.get('/leaders',
-         response_model=User,
          description="Get users who completed challege with time recorded")
-async def get_users():
+async def get_users(request: Request):
     response = await fetch_leaderboard_users()
-    return response
+    response.sort(key=lambda x: x.timetaken)
+    users_dict = []
+    for x in response: 
+        if x.timetaken > 0:
+            users_dict.append(x.__dict__)
+    df = pd.DataFrame(users_dict)
+    return templates.TemplateResponse('leaders.html', context={'request': request, 'data': df.to_html()})

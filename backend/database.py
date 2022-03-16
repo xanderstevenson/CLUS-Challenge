@@ -91,6 +91,13 @@ async def end_the_challenge(userid: str):
         # Clear car data, return car to available pool
         [document.pop(key) for key in { "_id","userid", "start"}]
         await collection.replace_one(filter,document)
-        document = await collection.find_one({'number': car_number})
-                                             
+        document = await collection.find_one({'number': car_number})                                         
     return document
+
+async def fetch_leaderboard_users():
+    collection = database.user
+    users= []
+    cursor = collection.find({})
+    async for document in cursor:
+        users.append(User(**document))
+    return users
