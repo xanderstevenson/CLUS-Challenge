@@ -16,13 +16,12 @@ with open(META) as f:
     data = json.load(f)
     
 # Loading Questions Database 
-  
 print ('Loading questions database...')
 collection = database.question
 for i in data['questions']:
     i['filename'] = LOCAL_FILE_URL_PREFIX + i['filename']
-    filter = { '_id' : i['_id'] }
-    if( collection.find(filter) ):       # If exists then update/replace with new values
+    filter = { '_id':i['_id'] }
+    if( collection.find_one(filter) ):       # If exists then update/replace with new values
         print(f'updating -> Question#{i["_id"]}...')
         key = i.pop('_id')
         collection.replace_one( {'_id':key}, i )
@@ -31,12 +30,11 @@ for i in data['questions']:
         collection.insert_one(i)
 
 # Loading Race Cars Database
-
 print ('Loading race cars database...')
 collection = database.car
 for i in data['cars']:
     filter = {"number":i['number']}
-    if( collection.find(filter) ):
+    if( collection.find_one(filter) ):
         print(f'updating race car #{i["number"]}')
         collection.replace_one( filter, i )
     else:

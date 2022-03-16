@@ -93,3 +93,9 @@ async def end_challenge(userid: str):
         return response
     raise HTTPException(404, f"Can't signal end of challenge for user {userid}")
          
+@app.get('/leaders',
+         response_model=User,
+         description="Get users who completed challege with time recorded")
+async def get_users():
+    response = await fetch_leaderboard_users()
+    return response

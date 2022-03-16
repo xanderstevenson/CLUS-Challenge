@@ -5,7 +5,7 @@ from utils import get_time, get_uuid
 
 # export DATABASE_URL = 'mongodb://devnet:ciscopsdt@10.194.239.243:27017/'
 DB_CONNECT_URL = os.getenv('DATABASE_URL')
-
+print(DB_CONNECT_URL)
 client = motor.motor_asyncio.AsyncIOMotorClient(DB_CONNECT_URL)
 database = client.DemoQuestion
 
