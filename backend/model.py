@@ -19,6 +19,7 @@ class Car(BaseModel):
     _id: str
     number: int
     ip: str
+    color: str
     position: int = 0
     start: Optional[int]
     userid: Optional[str]
