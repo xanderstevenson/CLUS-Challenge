@@ -12,9 +12,9 @@
         {   "_id": "Q10", "answer" : "B", "prompt": "Does this look familiar to you?", "filename": "Q10.png" }
     ],
     "cars": [
-        {  "number": 1, "color": "red", "ip" : "10.20.1.5", "position": 0 },
-        {  "number": 2, "color": "blue", "ip" : "10.20.1.6", "position": 0 },
-        {  "number": 3, "color": "green", "ip" : "10.20.1.7", "position": 0 },
-        {  "number": 4, "color": "yellow", "ip" : "10.20.1.8", "position": 0 }
+        {  "number": 1, "color": "red", "speed": 1000, "ip" : "10.20.1.5", "position": 0 },
+        {  "number": 2, "color": "blue", "speed": 1000, "ip" : "10.20.1.6", "position": 0 },
+        {  "number": 3, "color": "green", "speed": 1000, "ip" : "10.20.1.7", "position": 0 },
+        {  "number": 4, "color": "yellow", "speed": 1000,  "ip" : "10.20.1.8", "position": 0 }
     ]
 }
