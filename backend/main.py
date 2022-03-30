@@ -115,9 +115,10 @@ async def score_a_question(user_id: str, weight: int):
     ''' 
     (car_url,payload) = await get_car_payload(user_id,weight)
     if (payload is not None):
-        response = await send_command_to_car(car_url,payload)
-    if response:
-        return response
+        print('Payload =',payload)
+        # response = await send_command_to_car(car_url,payload)
+        # if response:
+        #     return response
     raise HTTPException(404, f"Can't send command to car for user {user_id}")
 
 # Migrate code from Leaderboard project here for now. This should be done in ReactJS as a

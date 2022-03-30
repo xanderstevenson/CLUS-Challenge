@@ -4,7 +4,8 @@ from pydantic import BaseModel
     
 class DemoQuestion(BaseModel):
     _id: str
-    answer: str
+    choices: list
+    answer: list
     prompt: Optional[str]
     weight: Optional[int]
     filename: str

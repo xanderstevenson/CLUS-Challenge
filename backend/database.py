@@ -8,6 +8,9 @@ DB_CONNECT_URL = os.getenv('DATABASE_URL')
 client = motor.motor_asyncio.AsyncIOMotorClient(DB_CONNECT_URL)
 database = client.DemoQuestion
 
+# Car URL template
+CAR_URL_TEMPLATE = 'http://%s:8888/chittybang'
+
 async def fetch_one_question(qnumber: str):
     collection = database.question
     document = await collection.find_one({"_id": qnumber})
@@ -105,13 +108,13 @@ async def fetch_leaderboard_users():
 async def get_car_payload(user_id: str,weight: int):
     collection = database.car
     filter = { 'userid': user_id }
-    document = await collection.find_one(filter)
     car_url = None
     payload = None
+    document = await collection.find_one(filter)
     if document:
         current_position = document['position']
         new_position = current_position + weight
-        car_url = 'http://%s' % document['ip']
+        car_url = CAR_URL_TEMPLATE % document['ip']
         print(f'current = {current_position}, new = {new_position}')
         if ( new_position >= 0 ):   # Don't want car to fall off cliff
             direction = 'forward' if (weight > 0) else 'backward'
