@@ -35,16 +35,17 @@ async def fetch_many_questions(maxQuestions):
     return new_questions
 
 # Create and register new user in DB, record startTime and return car id assigned to this user
-async def create_user(email: str, first: str, last: str) -> User:
+async def create_user(user):
     collection = database.user
-    user_in_db = await collection.find_one({"email": email.lower()})
+    print('Creating DB user ',user)
+    user_in_db = await collection.find_one({"email": user.email.lower()})
     if( user_in_db ):
-        print(f'User with email={email} already exists in database')
+        print(f'User with email={user.email} already exists in database')
         return {}
     user_id = get_uuid()
-    document = { "_id": user_id, "email": email.lower(), "first": first, "last": last }
+    document = { "_id": user_id, "email": user.email.lower(), "first": user.first, "last": user.last }
     result = await collection.insert_one(document)
-    return { "_id": user_id }
+    return { "id" :user_id }
 
 async def fetch_user_by_id(userid: str):
     collection = database.user

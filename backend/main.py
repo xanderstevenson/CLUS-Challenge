@@ -64,8 +64,11 @@ async def get_question_by_id(id):
           description="Create a new user",
           status_code=statuscode.HTTP_201_CREATED
           )
-async def register_a_user(email: str, first: str, last: str):
-    response = await create_user(email, first, last)
+async def register_a_user(user: User):
+    print(user)
+    response = await create_user(user)
+    if( response == {} ):
+        raise HTTPException(403, f"user with email {user.email} may already exists in DB")
     return response
 
 @app.get("/user/{userid}", 
