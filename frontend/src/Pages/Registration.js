@@ -5,12 +5,25 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useNavigate } from 'react-router-dom';
 import { useStateIfMounted } from "use-state-if-mounted";
 import axios from 'axios';
-
 import './Registration.css';
+import styled from 'styled-components';
 
 // Regular expression use for input validation
 const USER_REGEX = /^[A-z][A-z0-9-_]{3,23}$/;
 const EMAIL_REGEX = /^[A-Za-z0-9]+[._]?[A-Za-z0-9]+[@]\w+[. ]\w{2,3}$/;
+
+const RegisterRectangle = styled.div`
+width: 400px;
+height: 460px;
+overflow: hidden;
+position: relative;
+box-shadow: -3px 3px 7px #00000075, 3px 3px 7px #00000075, 3px -3px 7px #00000075, -3px -3px 7px #00000075;
+margin: 0px auto;
+margin-top: -100px;
+text-align: center;
+background-attachment: fixed;
+padding: 15px;
+`;
 
 const Registration = () => {
     const navigate = useNavigate();
@@ -118,7 +131,7 @@ const Registration = () => {
     }
 
     return (
-        <section className="App">
+        <RegisterRectangle className="App">
             <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">{errMsg}</p>
             <h1>User Registration</h1>
             <form onSubmit={handleSubmit}>
@@ -197,7 +210,7 @@ const Registration = () => {
 
                 <button disabled={!validFirstname || !validLastname || !validEmail ? true : false}>Start the challenge</button>
             </form>
-        </section>
+        </RegisterRectangle>
     )
 }
 
