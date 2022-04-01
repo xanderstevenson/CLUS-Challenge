@@ -59,9 +59,9 @@
 
     ],
     "cars": [
-        {  "number": 1, "ip" : "10.20.1.5", "color": "red", "position": 0 },
-        {  "number": 2, "ip" : "10.20.1.6", "color": "blue","position": 0 },
-        {  "number": 3, "ip" : "10.20.1.7", "color": "yellow","position": 0 },
-        {  "number": 4, "ip" : "10.20.1.8", "color": "green","position": 0 }
+        {  "number": 1, "ip" : "10.20.0.25", "color": "red", "speed": 500, "position": 0 },
+        {  "number": 2, "ip" : "10.20.0.25", "color": "blue","speed": 1000, "position": 0 },
+        {  "number": 3, "ip" : "10.20.0.25", "color": "yellow","speed": 500, "position": 0 },
+        {  "number": 4, "ip" : "10.20.0.25", "color": "green","speed": 500, "position": 0 }
     ]
 }

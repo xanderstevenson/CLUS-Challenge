@@ -1,3 +1,4 @@
+import re
 from fastapi import Request
 from fastapi import FastAPI, HTTPException
 from fastapi import status as statuscode
@@ -19,6 +20,7 @@ from database import (
     end_the_challenge,
     fetch_leaderboard_users,
     get_car_payload,
+    send_car_to_start_position,
 )
 
 from fastapi.middleware.cors import CORSMiddleware
@@ -45,7 +47,7 @@ async def hello_world():
     return {"Hello": "World"}
 
 # Maximum number of questions fetch from all questions in the DB, 0 will fetch all.
-MAX_NUMBER_OF_QUESTIONS = 5
+MAX_NUMBER_OF_QUESTIONS = 3
 
 @app.get("/questions")
 async def get_many_questions():
@@ -92,23 +94,30 @@ async def start_challenge(userid: str):
         return response
     raise HTTPException(404, f"Can't signal start of challenge for user {userid}")
 
-
-@app.put("/end}",
+@app.put("/end",
          response_model=Car,
          description="Signal end of the challenge and cleanup routine")
 async def end_challenge(userid: str):
     response = await end_the_challenge(userid)
     if response:
+        current_position = response['position']
+        car_id = response['number']
+        print('end_challenge: current position=',current_position,' car# ',car_id)
+        if( current_position > 0):
+            weight = -1 * current_position
+            (car_url,payload) = await get_car_payload('',car_id,weight)
+            if (payload is not None):
+                print(f'Send cmd to car {car_url} with payload {payload}')
+                data = json.loads(payload)
+                async with httpx.AsyncClient() as client:
+                    resp = await client.post(car_url,json=data)
+                    if resp:
+                        print('Sending POST to car with status code = ',resp.status_code)
+                    else:
+                        raise HTTPException(404, f"Can't send command to reset to starting position for user {userid}")       
+
         return response
     raise HTTPException(404, f"Can't signal end of challenge for user {userid}")
-
-# Send command to make the car move forward or backward using payload
-async def send_command_to_car(car_url: str, payload: str):
-    print('sending post command ->',car_url)
-    data = json.loads(payload)
-    print('with payload',data)
-    async with httpx.AsyncClient() as client:
-        await client.post(car_url,data=data)
 
 @app.put("/score",
         description="Actions taken after user answer a question correctly or incorrectly")
@@ -116,13 +125,40 @@ async def score_a_question(user_id: str, weight: int):
     ''' If user answers the question correctly, send weight as positive number
         otherwise, send weight as negative number.
     ''' 
-    (car_url,payload) = await get_car_payload(user_id,weight)
+    (car_url,payload) = await get_car_payload(user_id,0,weight)
     if (payload is not None):
-        print('Payload =',payload)
-        # response = await send_command_to_car(car_url,payload)
-        # if response:
-        #     return response
-    raise HTTPException(404, f"Can't send command to car for user {user_id}")
+        print(f'Send cmd to car {car_url} with payload {payload}')
+        data = json.loads(payload)
+        async with httpx.AsyncClient() as client:
+            response = await client.post(car_url,json=data)
+            print('Sending POST to car with status code = ',response.status_code)
+            if response:
+                return response.status_code
+            else:
+                raise HTTPException(404, f"Can't send command to car for user {user_id}")
+    return 200
+        
+
+@app.put("/reset/{carid}",
+        description="Reset car position and make it avaialble for grab (if user quit mid-race)")
+async def reset_car(carid: int):
+    current_position = await send_car_to_start_position(carid)
+    print('Current car position is ',current_position)
+    if current_position > 0:
+        weight = -1 * current_position
+        (car_url,payload) = await get_car_payload('',carid,weight)
+        if (payload is not None):
+            print(f'Send cmd to car {car_url} with payload {payload}')
+            data = json.loads(payload)
+            async with httpx.AsyncClient() as client:
+                response = await client.post(car_url,json=data)
+                print('Sending POST to car with status code = ',response.status_code)
+                if response:
+                    return response.status_code
+                else:
+                    raise HTTPException(404, f"Can't send command to reset car#{carid} to starting position")
+        return 200
+    return 200
 
 # Migrate code from Leaderboard project here for now. This should be done in ReactJS as a
 # frontend component.        
