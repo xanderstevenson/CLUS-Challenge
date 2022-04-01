@@ -131,18 +131,35 @@ const Challenge = () => {
     function handleOnclick(choice) {    
         console.log('Enter handleOnClick...qindex:',qindex,'answer',answer)
         let result = question.answer.includes(choice)
+        if (result){
+          ToggleVisibleNotVisible(question.choices)
+        }
         setYourAnswer(result)
         alert(result ? 'Correct' : 'Incorrect')
     }
 
     function handleNextQuestion(qindex) {
       console.log('Enter handleNextQuestion...qindex:',qindex,'answer',answer)
+      // New line to show back buttons after hiding them following correct answer
+      ToggleVisibleNotVisible(question.choices)
       if( qindex < questions.length-1 ) {
           console.log('qindex increment')
           setQIndex(qindex+1)
           setNextQuestion(questions[qindex+1])
       }
       setYourAnswer(undefined)
+    }
+
+    // New function to hide or show choice buttons
+    function ToggleVisibleNotVisible(choices){
+      for(let i=0; i < choices.length; i ++){
+        let x = document.getElementById(choices[i]);
+        if (x.style.display === "none") {
+          x.style.display = "inline";
+        } else {
+          x.style.display = "none";
+        }
+      }
     }
 
     return (
@@ -159,7 +176,7 @@ const Challenge = () => {
                 Please select your answer
                 </Typography>
                 {question.choices.map((choice) => (
-                    <AnimatedChoiceButtons color="primary" variant="contained" key={choice} onClick={() => handleOnclick(choice)}>
+                    <AnimatedChoiceButtons id={choice} variant="contained" key={choice} onClick={() => handleOnclick(choice)}>
                     {choice}
                     </AnimatedChoiceButtons>
                 ))}

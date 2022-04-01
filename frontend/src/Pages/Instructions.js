@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { Button } from '../components/styles/Button.styled'
+import Button from "@material-ui/core/Button";
 
 const Instructions = () => {
     const navigate = useNavigate();
