@@ -4,17 +4,27 @@
 from pymongo import MongoClient
 import os, json
 
-DB_CONNECT_URL = os.getenv('DATABASE_URL')
 LOCAL_FILE_URL_PREFIX = 'http://localhost:8000/static/'
-
-client = MongoClient(DB_CONNECT_URL)
-database = client.DemoQuestion 
 
 # Read all meta data for data models
 META = './data/meta.json'
 with open(META) as f:
     data = json.load(f)
-    
+
+environments_vars = data['env'][0]
+DB_CONNECT_URL              = environments_vars['database_url']
+DB_NAME                     = environments_vars['database_name']
+
+try:
+    print('Connecting to MongoDB...')
+    client = MongoClient(DB_CONNECT_URL)
+    client.server_info() # will throw an exception
+except:
+    print(f'Cannot connect with {DB_CONNECT_URL}')
+    exit()
+ 
+database = client[DB_NAME]
+
 # Loading Questions Database 
 print ('Loading questions database...')
 collection = database.question

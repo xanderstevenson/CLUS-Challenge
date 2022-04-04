@@ -12,9 +12,17 @@ DB_CONNECT_URL              = environments_vars['database_url']
 MAX_QUESTIONS_TO_GENERATE   = environments_vars['questions_to_generate']
 CAR_SIMULATION              = environments_vars['car_simulation']
 CAR_URL_TEMPLATE            = environments_vars['car_url_template']
+DB_NAME                     = environments_vars['database_name']
 
-client = motor.motor_asyncio.AsyncIOMotorClient(DB_CONNECT_URL)
-database = client.DemoQuestion
+try:
+    print('Connecting to MongoDB...')
+    client = motor.motor_asyncio.AsyncIOMotorClient(DB_CONNECT_URL)
+    client.server_info() # will throw an exception
+except:
+    print(f'Cannot connect DB with {DB_CONNECT_URL}')
+    exit()
+    
+database = client[DB_NAME]
 
 def get_environment_vars():
     return environments_vars
