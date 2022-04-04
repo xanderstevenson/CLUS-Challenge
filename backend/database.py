@@ -1,19 +1,30 @@
 import motor.motor_asyncio
-import os, random
+import os, random, json
 from model import DemoQuestion, User, Car
 from utils import get_time, get_uuid
 
-# export DATABASE_URL = 'mongodb://devnet:ciscopsdt@10.194.239.243:27017/'
-DB_CONNECT_URL = os.getenv('DATABASE_URL')
+# Read environment variables from meta file
+META = './data/meta.json'
+with open(META) as f:
+    data = json.load(f)    
+environments_vars = data['env'][0]
+DB_CONNECT_URL              = environments_vars['database_url']
+MAX_QUESTIONS_TO_GENERATE   = environments_vars['questions_to_generate']
+CAR_SIMULATION              = environments_vars['car_simulation']
+CAR_URL_TEMPLATE            = environments_vars['car_url_template']
+
 client = motor.motor_asyncio.AsyncIOMotorClient(DB_CONNECT_URL)
 database = client.DemoQuestion
+
+def get_environment_vars():
+    return environments_vars
 
 async def fetch_one_question(qnumber: str):
     collection = database.question
     document = await collection.find_one({"_id": qnumber})
     return document
 
-async def fetch_many_questions(maxQuestions):
+async def fetch_many_questions(maxQuestions=MAX_QUESTIONS_TO_GENERATE):
     # Only return maxQuestions from the database in random order
     questions = []
     # Fetch all questions from DB
@@ -121,7 +132,7 @@ async def fetch_leaderboard_users():
     return users
 
 # Car URL template
-CAR_URL_TEMPLATE = 'http://%s:8888/chittybang'
+
 
 async def get_car_payload(user_id: str,car_id: int,weight: int):
     ''' Get car payload by user_id or car_id

@@ -59,9 +59,16 @@
 
     ],
     "cars": [
-        {  "number": 1, "ip" : "10.20.0.25", "color": "red", "speed": 500, "position": 0 },
-        {  "number": 2, "ip" : "10.20.0.25", "color": "blue","speed": 1000, "position": 0 },
-        {  "number": 3, "ip" : "10.20.0.25", "color": "yellow","speed": 500, "position": 0 },
-        {  "number": 4, "ip" : "10.20.0.25", "color": "green","speed": 500, "position": 0 }
+        {  "number": 1, "ip" : "10.20.0.20", "color": "red", "speed": 500, "position": 0 },
+        {  "number": 2, "ip" : "10.20.0.20", "color": "blue","speed": 1000, "position": 0 },
+        {  "number": 3, "ip" : "10.20.0.20", "color": "yellow","speed": 500, "position": 0 },
+        {  "number": 4, "ip" : "10.20.0.20", "color": "green","speed": 500, "position": 0 }
+    ],
+    "env": [
+        { "questions_to_generate": 5,
+          "car_simulation": true,
+          "database_url": "mongodb://davidn:ciscopsdt@10.0.0.54:27017/",
+          "car_url_template": "http://%s:8888/chittybang"
+        }
     ]
 }

@@ -11,6 +11,7 @@ import asyncio
 import json
 
 from database import (
+    get_environment_vars,
     fetch_one_question,
     fetch_many_questions,
     create_user,
@@ -39,19 +40,19 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+environment_vars = get_environment_vars()
+
 # Added to create path to static files for all question images
 app.mount("/static", StaticFiles(directory="data/questions"),name="static")
 
 @app.get("/")
 async def hello_world():
-    return {"Hello": "World"}
-
-# Maximum number of questions fetch from all questions in the DB, 0 will fetch all.
-MAX_NUMBER_OF_QUESTIONS = 3
+    envs = get_environment_vars()
+    return { 'Car simulation:' : envs['car_simulation'] }
 
 @app.get("/questions")
 async def get_many_questions():
-    response = await fetch_many_questions(MAX_NUMBER_OF_QUESTIONS)
+    response = await fetch_many_questions()
     return response
 
 @app.get("/question/{id}}", response_model=DemoQuestion)
@@ -60,7 +61,6 @@ async def get_question_by_id(id):
     if response:
         return response
     raise HTTPException(404, f"There is no question with number {id}")
-
 
 @app.post("/user",
           description="Create a new user",
@@ -108,14 +108,14 @@ async def end_challenge(userid: str):
             (car_url,payload) = await get_car_payload('',car_id,weight)
             if (payload is not None):
                 print(f'Send cmd to car {car_url} with payload {payload}')
-                data = json.loads(payload)
-                async with httpx.AsyncClient() as client:
-                    resp = await client.post(car_url,json=data)
-                    if resp:
-                        print('Sending POST to car with status code = ',resp.status_code)
-                    else:
-                        raise HTTPException(404, f"Can't send command to reset to starting position for user {userid}")       
-
+                if( environment_vars['car_simulation'] is not True):
+                    data = json.loads(payload)
+                    async with httpx.AsyncClient() as client:
+                        resp = await client.post(car_url,json=data)
+                        if resp:
+                            print('Sending POST to car with status code = ',resp.status_code)
+                        else:
+                            raise HTTPException(404, f"Can't send command to reset to starting position for user {userid}")       
         return response
     raise HTTPException(404, f"Can't signal end of challenge for user {userid}")
 
@@ -130,15 +130,15 @@ async def score_a_question(user_id: str, weight: int):
         print(f'Send cmd to car {car_url} with payload {payload}')
         data = json.loads(payload)
         async with httpx.AsyncClient() as client:
-            response = await client.post(car_url,json=data)
-            print('Sending POST to car with status code = ',response.status_code)
-            if response:
-                return response.status_code
-            else:
-                raise HTTPException(404, f"Can't send command to car for user {user_id}")
+            if( environment_vars['car_simulation'] is not True):
+                response = await client.post(car_url,json=data)
+                print('Sending POST to car with status code = ',response.status_code)
+                if response:
+                    return response.status_code
+                else:
+                    raise HTTPException(404, f"Can't send command to car for user {user_id}")
     return 200
         
-
 @app.put("/reset/{carid}",
         description="Reset car position and make it avaialble for grab (if user quit mid-race)")
 async def reset_car(carid: int):
@@ -149,14 +149,15 @@ async def reset_car(carid: int):
         (car_url,payload) = await get_car_payload('',carid,weight)
         if (payload is not None):
             print(f'Send cmd to car {car_url} with payload {payload}')
-            data = json.loads(payload)
-            async with httpx.AsyncClient() as client:
-                response = await client.post(car_url,json=data)
-                print('Sending POST to car with status code = ',response.status_code)
-                if response:
-                    return response.status_code
-                else:
-                    raise HTTPException(404, f"Can't send command to reset car#{carid} to starting position")
+            if( environment_vars['car_simulation'] is not True):
+                data = json.loads(payload)
+                async with httpx.AsyncClient() as client:
+                    response = await client.post(car_url,json=data)
+                    print('Sending POST to car with status code = ',response.status_code)
+                    if response:
+                        return response.status_code
+                    else:
+                        raise HTTPException(404, f"Can't send command to reset car#{carid} to starting position")
         return 200
     return 200
 
