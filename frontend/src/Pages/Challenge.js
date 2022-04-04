@@ -106,7 +106,7 @@ const Challenge = () => {
             })
             .catch( error => {
                 console.log(error.response)
-                alert('Cannot send axios command to car for user:',userid)
+                alert('Cannot send axios command to car for user:',{userid})
             })
         }
         if( answer && (qindex === (questions.length-1))) {
