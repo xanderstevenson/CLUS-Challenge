@@ -9,7 +9,7 @@ import './Registration.css';
 import styled from 'styled-components';
 
 // Regular expression use for input validation
-const USER_REGEX = /^[A-z][A-z0-9-_]{3,23}$/;
+const USER_REGEX = /^[A-z][A-z0-9-_]{2,24}$/;
 const EMAIL_REGEX = /^[A-Za-z0-9]+[._]?[A-Za-z0-9]+[@]\w+[. ]\w{2,3}$/;
 
 const RegisterRectangle = styled.div`
@@ -155,7 +155,7 @@ const Registration = () => {
                 />
                 <p id="uidnote" className={firstnameFocus && firstname && !validFirstname ? "instructions" : "offscreen"}>
                     <FontAwesomeIcon icon={faInfoCircle} />
-                    4 to 24 characters.<br />
+                    3 to 25 characters.<br />
                     Must begin with a letter.<br />
                     Letters, numbers, underscores, hyphens allowed.
                 </p>
