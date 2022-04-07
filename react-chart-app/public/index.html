@@ -45,51 +45,69 @@
     <!-- <script type="text/javascript" src="../src/CarProgress.js"></script>
     <script type="text/javascript" src="./CarProgress.js"></script>
     <script type="text/javascript" src="CarProgress.js"></script> -->
-    <h1 id='racing-title'>Racing Progress...</h1>
+    <h1 id='racing-title'>Race Progress</h1>
+    <center><button onclick="GetCarProgress()">begin tracking</button></center>
     </br>
 
+ 
+    <div id="cars-block">
+      <div class='car'>
+        <h1>Car 1</h1>
+        <h2 class='cars' id='car1'>0</h2>
+      </div>
+      <div class='car'>
+        <h1>Car 2</h1>
+        <h2 class='cars' id='car2'>0</h2>
+      </div>
+      <div class='car'>
+        <h1>Car 3</h1>
+        <h2 class='cars' id='car3'>0</h2>
+      </div>
+    </div>
+ 
 
-    <div class='car'>
-      <h1>Car 1</h1>
-      <h2 id='car1'></h2>
-    </div>
-    <div class='car'>
-      <h1>Car 2</h1>
-      <h2 id='car2'></h2>
-    </div>
-    <div class='car'>
-      <h1>Car 3</h1>
-      <h2 id='car3'></h2>
-    </div>
+
 
     <script>
-      var number = 0;
       
+      function GetCarProgress(){
+      
+        var car1 = document.getElementById("car1")
+        var car2 = document.getElementById("car2")
+        var car3 = document.getElementById("car3")
+
       setInterval(function(){
-        function generateRandom(min = -1, max = 3) {
+          fetch("http://127.0.0.1:8000/cars", {
+              headers: {
+                Accept: "application/json"
+              }
+            })
+            .then(response => response.json())
+            .then(data => {
+              car1.innerHTML = data[0].position
+              car2.innerHTML = data[1].position
+              car3.innerHTML = data[2].position
 
-        // find diff
-        let difference = max - min;
-
-        // generate random number 
-        let rand = Math.random();
-
-        // multiply with difference 
-        rand = Math.floor( rand * difference);
-
-        // add with min value 
-        rand = rand + min;
-
-        return rand;
-        }
-        document.getElementById("car1").innerHTML = generateRandom();
-        document.getElementById("car2").innerHTML = generateRandom();
-        document.getElementById("car3").innerHTML = generateRandom();
-      }, 1000);
-  
+              car1.style.marginLeft = (data[0].position * 300).toString() + "px"
+              car2.style.marginLeft = (data[1].position * 300).toString() + "px"
+              car3.style.marginLeft = (data[2].position * 300).toString() + "px"
+            })
+            .then(
+              
+            )
+            .catch(function (error) {
+              console.log("Error: " + error);
+          });
+      }, 2000);
+    }
     </script>
 
-    
+  <script>
+
+
+  <script>
+
+  
 
   </body>
 </html>
