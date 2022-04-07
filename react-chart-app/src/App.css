@@ -1,0 +1,20 @@
+
+body {
+  background-color: white;
+}
+
+#racing-title {
+  width: 320px;
+  text-align: center;
+  padding: 10px;
+  border: 1px ridge silver;
+  box-shadow: 3px 3px 10px silver;
+  margin: 10px auto;
+}
+
+.car {
+  margin: 50px 20px;
+  padding: 10px 15px;
+  border: 1px ridge silver;
+  box-shadow: 3px 3px 10px silver;
+}
