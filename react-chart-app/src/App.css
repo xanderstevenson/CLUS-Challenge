@@ -23,25 +23,27 @@ body {
 #cars-block {
   width: 100%;
   margin: 0px auto;
+  margin-top: -20px;
 
 }
 
 .cars {
   margin-left: 5px;
   padding: 5px;
-  width: 20px;
+  width: 125px;
   text-align: center;
-  box-shadow: 3px 3px 6px gray;
+  /* box-shadow: 3px 3px 6px gray; */
+  background-color: none;
 }
 
 #car1 {
-  border: 2px solid red;
+  /* border: 2px solid red; */
 }
 
 #car2 {
-  border: 2px solid blue;
+
 }
 
 #car3 {
-  border: 2px solid yellow;
+ 
 }

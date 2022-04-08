@@ -45,23 +45,23 @@
     <!-- <script type="text/javascript" src="../src/CarProgress.js"></script>
     <script type="text/javascript" src="./CarProgress.js"></script>
     <script type="text/javascript" src="CarProgress.js"></script> -->
-    <h1 id='racing-title'>Race Progress</h1>
-    <center><button onclick="GetCarProgress()">begin tracking</button></center>
+    <h1 id='racing-title'>Dev Dash</h1>
+    <center><button onclick="GetCarProgress()">Race!</button></center>
     </br>
 
  
     <div id="cars-block">
       <div class='car'>
         <h1>Car 1</h1>
-        <h2 class='cars' id='car1'>0</h2>
+        <img class='cars' id='car1' src="./images/red-stock-car.png"  />
       </div>
       <div class='car'>
         <h1>Car 2</h1>
-        <h2 class='cars' id='car2'>0</h2>
+        <img class='cars' id='car2' src="./images/blue-stock-car.png"  />
       </div>
       <div class='car'>
         <h1>Car 3</h1>
-        <h2 class='cars' id='car3'>0</h2>
+        <img class='cars' id='car3' src="./images/yellow-stock-car.png"  />
       </div>
     </div>
  
@@ -69,45 +69,55 @@
 
 
     <script>
-      
       function GetCarProgress(){
-      
-        var car1 = document.getElementById("car1")
-        var car2 = document.getElementById("car2")
-        var car3 = document.getElementById("car3")
+        car1_position=0
+        car2_position=0
+        car3_position=0
+        setInterval(function(){
+          function random_points(items){
+            const randomIndex =  items[Math.floor(Math.random()*items.length)];  
+            const item = items[randomIndex];
+            return item;
+          }
 
-      setInterval(function(){
-          fetch("http://127.0.0.1:8000/cars", {
-              headers: {
-                Accept: "application/json"
-              }
-            })
-            .then(response => response.json())
-            .then(data => {
-              car1.innerHTML = data[0].position
-              car2.innerHTML = data[1].position
-              car3.innerHTML = data[2].position
+          var possible_points = [0,1,2]
+          if(car1_position < 10 && car2_position < 10 && car3_position < 10) {
+            car1_position += random_points(possible_points)            
+            car2_position += random_points(possible_points)
+            car3_position += random_points(possible_points)
+          }
+          else{
+            if (car1_position == car2_position || car2_position == car3_position){
+              alert("It's a tie!")
+            }
+            else if (car1_position > car2_position && car1_position > car3_position){
+              alert("car#1 is the winner")
+            }
+            else if (car2_position > car1_position && car2_position > car3_position){
+              alert("car#2 is the winner")
+            }
+            else {
+              alert("car#3 is the winner");
+            }
+          
+          }
+          var car1 = document.getElementById("car1")
+          var car2 = document.getElementById("car2")
+          var car3 = document.getElementById("car3")
 
-              car1.style.marginLeft = (data[0].position * 300).toString() + "px"
-              car2.style.marginLeft = (data[1].position * 300).toString() + "px"
-              car3.style.marginLeft = (data[2].position * 300).toString() + "px"
-            })
-            .then(
-              
-            )
-            .catch(function (error) {
-              console.log("Error: " + error);
-          });
-      }, 2000);
+
+          car1.style.marginLeft = (car1_position * 150).toString() + "px"
+          car2.style.marginLeft = (car2_position * 150).toString() + "px"
+          car3.style.marginLeft = (car3_position * 150).toString() + "px"
+
+
+        }, 2000);
     }
     </script>
 
-  <script>
-
-
-  <script>
 
   
 
   </body>
 </html>
+
