@@ -122,7 +122,7 @@ const Registration = () => {
             })
             .catch( error => {
                 console.log(error.response)
-                alert('Cannot add user',)
+                alert('Cannot register user, user may have already taken the challenge',)
             })
         } catch (err) {
             setErrMsg('Registration Failed')
@@ -207,7 +207,6 @@ const Registration = () => {
                     8 to 50 characters.<br />
                     Please enter a valid email address<br />
                 </p>
-
                 <button disabled={!validFirstname || !validLastname || !validEmail ? true : false}>Start the challenge</button>
             </form>
         </RegisterRectangle>
