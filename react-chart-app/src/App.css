@@ -1,39 +1,52 @@
 
 body {
-  background-color: white;
+  background-color: #a79ad7;
 }
 
-#racing-title {
-  width: 300px;
+#DevDash {
+  width: 400px;
   text-align: center;
-  padding: 10px;
-  border: 1px ridge silver;
-  box-shadow: 3px 3px 10px silver;
+  /* padding: 10px; */
+  border: 1px ridge teal;
+  box-shadow: 3px 3px 10px black;
   margin: 10px auto;
+  display: block;
 }
 
 .car {
   margin: 50px 150px;
   padding: 10px 15px;
-  border: 1px ridge silver;
-  box-shadow: 3px 3px 10px silver;
+  border: 1px ridge gray;
+  box-shadow: 3px 3px 10px #5f5d69;
   width: 1500px;
+  height: 100px;
+  background-color: #c8cfce;
 }
 
 #cars-block {
   width: 100%;
   margin: 0px auto;
-  margin-top: -20px;
+  margin-top: -30px;
+}
 
+#finish-line {
+  border: 1px solid white;
+  background-color: white;
+  width: 3px;
+  height: 462px;
+  margin-top: -515px;
+  margin-left: 1681px;
+  clear: left;
+  display: block;
 }
 
 .cars {
   margin-left: 5px;
-  padding: 5px;
-  width: 125px;
+  /* padding: 5px; */
+  width: 200px;
   text-align: center;
   /* box-shadow: 3px 3px 6px gray; */
-  background-color: none;
+
 }
 
 #car1 {
@@ -46,4 +59,52 @@ body {
 
 #car3 {
  
+}
+
+#copyright {
+  margin-top: 40px;
+  text-align: center;
+  color: indigo;
+}
+
+#scoreboard {
+  display: block;
+  margin: 20px auto;
+  text-align: center;
+  /* border: 1px ridge teal; */
+  width: 500px;
+  height: 200px;
+  background-color: #4a607f;
+  color: #cdcdcd;
+}
+
+#leaderboard-header {
+  text-align: center;
+  margin: 0px auto;
+  border: 1px ridge #cdcdcd;
+}
+
+#leaderboard-table td {
+  font-size: 20px;
+  margin-left: 15px;
+  font-weight: bold;
+}
+
+.leaderboard-num {
+  border: 1px ridge #cdcdcd;
+  padding: 2px;
+  
+}
+
+.leaderboard-name {
+  margin: 0px auto;
+  padding-left: 100px;
+  text-align: center;
+  /* display: block; */
+}
+
+.leaderboard-time {
+  
+  margin-right: -70px;
+  /* text-align: center; */
 }
