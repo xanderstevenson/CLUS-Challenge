@@ -108,3 +108,10 @@ body {
   margin-right: -70px;
   /* text-align: center; */
 }
+
+.winner {
+  text-align: center;
+  margin: 30px auto;
+  font-size: 48px;
+  font-weight: bold;
+}

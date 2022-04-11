@@ -94,9 +94,10 @@
 
     <script>
       function GetCarProgress(){
-        car1_position=0
-        car2_position=0
-        car3_position=0
+        let car1_position=0
+        let car2_position=0
+        let car3_position=0
+        let leaderboard_hmtl = document.getElementById("leaderboard-table")
         setInterval(function(){
           function random_points(items){
             const randomIndex =  items[Math.floor(Math.random()*items.length)];  
@@ -110,17 +111,18 @@
             car3_position += random_points(possible_points)
           }
           else{
+            leaderboard_hmtl.classList.add("winner")
             if (car1_position == car2_position || car2_position == car3_position){
-              alert("It's a tie!")
+              leaderboard_hmtl.textContent = "It's a tie!"
             }
             else if (car1_position > car2_position && car1_position > car3_position){
-              alert("car#1 is the winner")
+              leaderboard_hmtl.textContent = "Car #1 is the Winner!"
             }
             else if (car2_position > car1_position && car2_position > car3_position){
-              alert("car#2 is the winner")
+              leaderboard_hmtl.textContent = "Car #2 is the Winner!"
             }
             else {
-              alert("car#3 is the winner");
+              leaderboard_hmtl.textContent = "Car #3 is the Winner!";
             }
           
           }
