@@ -8,13 +8,10 @@ import AnimatedChoiceButtons from '../components/styles/Button.styled'
 // https://react.school/material-ui/templates
 import {
   makeStyles,
-  createTheme,
-  ThemeProvider
 } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
-import {  blue, pink } from "@material-ui/core/colors";
 import Dialog from "@material-ui/core/Dialog";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
@@ -31,13 +28,6 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: theme.spacing(10)
   }
 }));
-
-const defaultTheme = createTheme({
-  palette: {
-    primary: blue,
-    secondary: pink
-  }
-});
 
 const StyledImage = styled.img`
     width: 960px;
@@ -64,13 +54,22 @@ const Challenge = () => {
 
     const [question,setNextQuestion] = useState(questions[qindex-1]);
 
-    function sendCommandToCar(distance) {
+    function saveCarPositionInLocalStorage(distance) {
+      console.log('Save car positon to localStorage, distance=',distance)
+      // If new position negative then reset it to 0
+      car.position = ((car.position+distance) >= 0)? car.position+distance : 0
+      let car_position = {"number": car.number, "position": car.position}
+      console.log('new car position=',car_position)
+      localStorage.setItem("car",JSON.stringify(car_position))
+    }
+
+    function sendCommandToCar(car,distance) {
       console.log('Send AXIOS command to car for user',userid,'with distance',distance)
       let url=`http://localhost:8000/score?user_id=${userid}&weight=${distance}`
       console.log(url)
       axios.put(url)
       .then(response => {
-          console.log(response.data)
+          saveCarPositionInLocalStorage(distance)
       })
       .catch( error => {
           console.log(error.response)
@@ -86,6 +85,7 @@ const Challenge = () => {
       axios.put(url)
       .then(response => {
           console.log(response.data)
+          saveCarPositionInLocalStorage(-1 * car.position)
       })
       .catch( error => {
           console.log(error.response)
@@ -100,7 +100,7 @@ const Challenge = () => {
             // Compute distance to go back/forth for the car
             let weight = ( questions[qindex-1].weight === null ) ? 1 : questions[qindex-1].weight
             let distance = (answer ? 1: -1) * weight
-            sendCommandToCar(distance)
+            sendCommandToCar(car,distance)
         }
         setOpenDialog(true)
         if( answer && qindex === questions.length) {
@@ -134,7 +134,6 @@ const Challenge = () => {
     }
 
     return (
-        <ThemeProvider theme={defaultTheme}>
         <Container>
             <Typography color="textSecondary" variant="h6">
             Welcome {firstname} to DevRel500 challenge - {car.color} car is your car color
@@ -184,7 +183,6 @@ const Challenge = () => {
             </Container>
             <div className={classes.spacer} />
         </Container>
-        </ThemeProvider>
     );
 }
 

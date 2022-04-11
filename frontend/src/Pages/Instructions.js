@@ -5,10 +5,12 @@ const Instructions = () => {
     const navigate = useNavigate();
 
     return (
-        <Button onClick={() => {navigate("/")}}>
-            {" "}
-            Click to jump to home page
-        </Button>
+        <div>
+            <Button onClick={() => {navigate("/")}}>
+                {" "}
+                Click to jump to main page 
+            </Button>
+        </div>
     );
 }
 
