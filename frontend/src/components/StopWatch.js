@@ -10,6 +10,14 @@ const Timer = styled.h2` {
     align-items: center;
 }`
 
+const formatTime = (timer) => {
+    const getSeconds = `0${(timer % 60)}`.slice(-2)
+    const minutes = `${Math.floor(timer / 60)}`
+    const getMinutes = `0${minutes % 60}`.slice(-2)
+  
+    return `${getMinutes} : ${getSeconds}`
+  }
+
 const StopWatch = () => {
   const [count, setCount] = useState(0);
 
@@ -25,7 +33,7 @@ const StopWatch = () => {
 
   return (
     <Timer>
-        {count}s
+        {formatTime(count)}
     </Timer>
   );
 }
