@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styled from 'styled-components'
 
-const Timer = styled.h3` {
+const Timer = styled.h2` {
     margin : 1rem;
     width: 100%;
     display: flex;
@@ -25,7 +25,7 @@ const StopWatch = () => {
 
   return (
     <Timer>
-        <h1>{count}s</h1>
+        {count}s
     </Timer>
   );
 }
