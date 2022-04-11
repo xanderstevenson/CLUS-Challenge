@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import axios from 'axios';
 import AnimatedChoiceButtons from '../components/styles/Button.styled'
+import StopWatch from '../components/StopWatch'
 
 // More Material UI examples
 // https://react.school/material-ui/templates
@@ -136,7 +137,7 @@ const Challenge = () => {
     return (
         <Container>
             <Typography color="textSecondary" variant="h6">
-            Welcome {firstname} to DevRel500 challenge - {car.color} car is your car color
+            Welcome {firstname} to DevRel500 challenge - You've been assigned to "{car.color}"" car
             </Typography>
             <Container >
                 <StyledImage src={question.filename} alt="" id="img" className="img" />
@@ -150,6 +151,7 @@ const Challenge = () => {
                     {choice}
                     </AnimatedChoiceButtons>
                 ))}
+                <StopWatch />
                 {(openDialog) && (qindex <= questions.length) && (
                     <Dialog open={openDialog}>
                       <DialogTitle>{dialogTitle}</DialogTitle>
@@ -181,7 +183,6 @@ const Challenge = () => {
                   </Dialog>
                 )}
             </Container>
-            <div className={classes.spacer} />
         </Container>
     );
 }
