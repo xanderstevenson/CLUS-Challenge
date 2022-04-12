@@ -57,7 +57,12 @@ async def create_user(user):
     user_in_db = await collection.find_one({"email": user.email.lower()})
     if( user_in_db ):
         print(f'User with email={user.email} already exists in database')
-        return {}
+        print(type(user_in_db))
+        if( ('timetaken' in user_in_db) and (user_in_db['timetaken'] > 0) ):  # Don't allow user on leaderboard to retake the challenge
+            return {}
+        else:
+            print('User already registered but have not taken or completed challenge, permission to take challenge granted',user_in_db['_id'])
+            return { "id": user_in_db['_id'] }
     user_id = get_uuid()
     document = { "_id": user_id, "email": user.email.lower(), "first": user.first, "last": user.last }
     result = await collection.insert_one(document)
