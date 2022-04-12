@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import styled from 'styled-components'
 
-const Timer = styled.h2` {
+const Timer = styled.h3` {
+    font-family: 'Rajdhani', sans-serif;
     margin : 1rem;
     width: 100%;
     display: flex;
