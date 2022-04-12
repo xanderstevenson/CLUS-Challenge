@@ -52,52 +52,35 @@
     
     <div id="cars-block">
       <div class='car'>
-        <!-- <h1>Car 1</h1> -->
+        <img class="road-lines" src="./images/road-lines.png">
         <img class='cars' id='car1' src="./images/red-stock-car.png"  />
       </div>
       <div class='car'>
-        <!-- <h1>Car 2</h1> -->
+        <img class="road-lines" src="./images/road-lines.png">
         <img class='cars' id='car2' src="./images/blue-stock-car.png"  />
       </div>
       <div class='car'>
-        <!-- <h1>Car 3</h1> -->
+        <img class="road-lines" src="./images/road-lines.png">
         <img class='cars' id='car3' src="./images/yellow-stock-car.png"  />
       </div>
     </div>
     <div id=finish-line></div>
     </br>
-    <div id="scoreboard">
-      <table id="leaderboard-table">
-        <h1 id="leaderboard-header">Leaderboard</h1>
-          <tr>
-            <td class="leaderboard-num">1.</td><td class="leaderboard-name">Bugs Bunny</td><td >---- </td><td class="leaderboard-time">29:32</td>
-          </tr>
-          <tr>
-            <td class="leaderboard-num">2.</td><td class="leaderboard-name">Jack Sparrow</td><td>----</td><td class="leaderboard-time">30:25</td>
-          <tr>
-          <tr>
-            <td class="leaderboard-num">3.</td><td class="leaderboard-name">Anastasia Li</td><td>----</td><td class="leaderboard-time">31:57</td>
-          </tr>
-          <tr>
-            <td class="leaderboard-num">4.</td><td class="leaderboard-name">Tom Cruise</td><td>----</td><td class="leaderboard-time">32:06</td>
-          <tr>
-          <tr>
-            <td class="leaderboard-num">5.</td><td class="leaderboard-name">Michaelangelo DiVincison</td><td>----</td><td class="leaderboard-time">33:23</td>
-          <tr>
-      </table>
-      
+    <div  id="leaderboard"> </div>
+    <div id="copyright">Copyright © 2022 Cisco Systems, Inc.</div>
     </div>
-    <p id="copyright">Copyright © 2022 Cisco Systems, Inc.</p>
+    
  
 
 
 
     <script>
+
       function GetCarProgress(){
+        var leaderboard_hmtl = document.getElementById("leaderboard")
         let car1_position=0
         let car2_position=0
         let car3_position=0
-        let leaderboard_hmtl = document.getElementById("leaderboard-table")
         setInterval(function(){
           function random_points(items){
             const randomIndex =  items[Math.floor(Math.random()*items.length)];  
@@ -111,18 +94,19 @@
             car3_position += random_points(possible_points)
           }
           else{
+
             leaderboard_hmtl.classList.add("winner")
             if (car1_position == car2_position || car2_position == car3_position){
               leaderboard_hmtl.textContent = "It's a tie!"
             }
             else if (car1_position > car2_position && car1_position > car3_position){
-              leaderboard_hmtl.textContent = "Car #1 is the Winner!"
+              leaderboard_hmtl.textContent = "Car 1 is the Winner!"
             }
             else if (car2_position > car1_position && car2_position > car3_position){
-              leaderboard_hmtl.textContent = "Car #2 is the Winner!"
+              leaderboard_hmtl.textContent = "Car 2 is the Winner!"
             }
             else {
-              leaderboard_hmtl.textContent = "Car #3 is the Winner!";
+              leaderboard_hmtl.textContent = "Car 3 is the Winner!";
             }
           
           }

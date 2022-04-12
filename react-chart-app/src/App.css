@@ -15,18 +15,20 @@ body {
 
 .car {
   margin: 50px 150px;
+  margin-left: 100px;
   padding: 10px 15px;
   border: 1px ridge gray;
   box-shadow: 3px 3px 10px #5f5d69;
-  width: 1500px;
+  width: 1550px;
   height: 100px;
   background-color: #c8cfce;
+  z-index: 1;
+  position: relative;
 }
 
 #cars-block {
   width: 100%;
   margin: 0px auto;
-  margin-top: -30px;
 }
 
 #finish-line {
@@ -35,83 +37,55 @@ body {
   width: 3px;
   height: 462px;
   margin-top: -515px;
-  margin-left: 1681px;
+  margin-left: 1676px;
   clear: left;
   display: block;
 }
 
 .cars {
   margin-left: 5px;
-  /* padding: 5px; */
   width: 200px;
-  text-align: center;
-  /* box-shadow: 3px 3px 6px gray; */
-
-}
-
-#car1 {
-  /* border: 2px solid red; */
-}
-
-#car2 {
-
-}
-
-#car3 {
- 
+  /* text-align: center; */
+  z-index: 4;
+  position: relative;
+  margin-top: -200px;
+  padding-bottom: 15px;
 }
 
 #copyright {
-  margin-top: 40px;
+  margin-top: 150px;
   text-align: center;
-  color: indigo;
-}
-
-#scoreboard {
+  color: #556986;
+  width: 100%;
   display: block;
-  margin: 20px auto;
-  text-align: center;
-  /* border: 1px ridge teal; */
-  width: 500px;
-  height: 200px;
-  background-color: #4a607f;
-  color: #cdcdcd;
+  font-size: 22px;
 }
 
-#leaderboard-header {
-  text-align: center;
-  margin: 0px auto;
-  border: 1px ridge #cdcdcd;
-}
-
-#leaderboard-table td {
-  font-size: 20px;
-  margin-left: 15px;
-  font-weight: bold;
-}
-
-.leaderboard-num {
-  border: 1px ridge #cdcdcd;
-  padding: 2px;
-  
-}
-
-.leaderboard-name {
-  margin: 0px auto;
-  padding-left: 100px;
-  text-align: center;
-  /* display: block; */
-}
-
-.leaderboard-time {
-  
-  margin-right: -70px;
-  /* text-align: center; */
+#leaderboard {
+height: 75px;
+margin: 30px auto;
 }
 
 .winner {
+  display: block;
   text-align: center;
-  margin: 30px auto;
+  padding-top: 10px;
   font-size: 48px;
   font-weight: bold;
+  color: #f5f5f5;
+  width: 575px;
+  /* text-shadow: 1px 1px 5px purple, -1px 1px 5px purple; */
+  border: 1px ridge purple;
+  box-shadow: 1px 1px 5px teal, -1px 1px 5px purple;
+  background-color: #5e779c;
+}
+
+.loser {
+  display: none;
+}
+
+.road-lines {
+  z-index: 2;
+  position: relative;
+  margin-left: 25px;
 }
