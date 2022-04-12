@@ -70,7 +70,9 @@ const Registration = () => {
     // Fetch questions from DB
     const [questions,setQuestions] = useState('')
     useEffect(() => {
-        axios.get('http://localhost:8000/questions')
+        const url = `${process.env.REACT_APP_API_URL}/questions`
+        console.log(url)
+        axios.get(url)
         .then (response => {
             setQuestions(response.data)
         })
@@ -79,7 +81,7 @@ const Registration = () => {
     // Wait for response from the (promise) POST before navigate to the new page
     useEffect( () => {
         if( userid !== '' && car === '' ) {
-            let url = `http://localhost:8000/start?userid=${userid}`
+            const url = `${process.env.REACT_APP_API_URL}/start?userid=${userid}`
             console.log(url)
             axios.put(url)
             .then(response => {
@@ -92,6 +94,7 @@ const Registration = () => {
             })
         } else if( car !== '' ) {
             console.log('userid',userid)
+            {questions.map((question) => question.filename )}
             navigate("/challenge",{state:{first:firstname,userid:userid,car:car,questions:questions}})
             setFirstname('')
             setLastname('')
@@ -115,7 +118,9 @@ const Registration = () => {
                 "first": firstname,
                 "last": lastname
             }
-            axios.post('http://localhost:8000/user', user)
+            const url = `${process.env.REACT_APP_API_URL}/user`
+            console.log(url)
+            axios.post(url, user)
             .then(response => {
                 console.log(response.data)
                 setUserId(response.data.id)

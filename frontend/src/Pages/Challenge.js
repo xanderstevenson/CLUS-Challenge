@@ -66,7 +66,7 @@ const Challenge = () => {
 
     function sendCommandToCar(car,distance) {
       console.log('Send AXIOS command to car for user',userid,'with distance',distance)
-      let url=`http://localhost:8000/score?user_id=${userid}&weight=${distance}`
+      const url = `${process.env.REACT_APP_API_URL}/score?user_id=${userid}&weight=${distance}`
       console.log(url)
       axios.put(url)
       .then(response => {
@@ -81,7 +81,8 @@ const Challenge = () => {
     function recordUserTime() {
       console.log('Send AXIOS command to record user time')
       // End of challenge - Record user time in DB for leaderboard display
-      let url = `http://localhost:8000/end?userid=${userid}`
+      
+      let url = `${process.env.REACT_APP_API_URL}/end?userid=${userid}`
       console.log(url)
       axios.put(url)
       .then(response => {
@@ -140,7 +141,7 @@ const Challenge = () => {
             Welcome {firstname} to DevRel500 challenge - You've been assigned to "{car.color}"" car
             </Typography>
             <Container >
-                <StyledImage src={question.filename} alt="" id="img" className="img" />
+                <StyledImage src={`${process.env.REACT_APP_API_URL}/static/${question.filename}`} alt="" id="img" className="img" />
             </Container>
             <Container className={classes.margin}>
                 <Typography color="textSecondary" variant="h6">
