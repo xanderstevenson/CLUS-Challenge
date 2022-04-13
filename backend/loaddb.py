@@ -29,7 +29,6 @@ database = client[DB_NAME]
 print ('Loading questions database...')
 collection = database.question
 for i in data['questions']:
-    i['filename'] = LOCAL_FILE_URL_PREFIX + i['filename']
     filter = { '_id':i['_id'] }
     if( collection.find_one(filter) ):       # If exists then update/replace with new values
         print(f'updating -> Question#{i["_id"]}...')
