@@ -45,6 +45,7 @@ const Challenge = () => {
     const [qindex,setQIndex] = useState(1)
     const [openDialog,setOpenDialog] = useState(false)
     const [endofChallenge,setEndOfChallenge] = useState(false)
+    const [wrongs, setWrongs] = useState(0)
 
     // Information passing from registration page
     let location = useLocation()
@@ -70,6 +71,7 @@ const Challenge = () => {
       console.log(url)
       axios.put(url)
       .then(response => {
+          console.log(response.data)
           saveCarPositionInLocalStorage(distance)
       })
       .catch( error => {
@@ -80,13 +82,11 @@ const Challenge = () => {
 
     function recordUserTime() {
       console.log('Send AXIOS command to record user time')
-      // End of challenge - Record user time in DB for leaderboard display
-      
+      // End of challenge - Record user time in DB for leader board display
       let url = `${process.env.REACT_APP_API_URL}/end?userid=${userid}`
       console.log(url)
       axios.put(url)
       .then(response => {
-          console.log(response.data)
           saveCarPositionInLocalStorage(-1 * car.position)
       })
       .catch( error => {
@@ -120,6 +120,7 @@ const Challenge = () => {
         console.log('Enter handleOnClick...qindex:',qindex,'answer',answer)
         let result = question.answer.includes(choice)
         setDialogTitle(result ? 'That is correct!' : 'Incorrect!!!')
+        setWrongs(result ? wrongs : wrongs+1 )
         setOpenDialog(true)
         setYourAnswer(result)
     }
@@ -173,7 +174,8 @@ const Challenge = () => {
                     <DialogTitle>Congratulations</DialogTitle>
                     <DialogContent>
                       <DialogContentText>
-                        You have completed the DevRel500 challenge
+                        You have completed the DevRel500 challenge with {questions.length} questions and
+                        you answered {wrongs} time(s) incorrectly. Please check the leader board for your standing.
                       </DialogContentText>
                     </DialogContent>
                     <DialogActions>
