@@ -68,7 +68,7 @@
         { "questions_to_generate": 5,
           "car_simulation": true,
           "database_url": "mongodb://devnet:ciscopsdt@10.194.239.243:27017/",
-          "database_name": "devrel500",
+          "database_name": "alex_test_devrel500",
           "car_url_template": "http://%s:8888/chittybang"
         }
     ]
