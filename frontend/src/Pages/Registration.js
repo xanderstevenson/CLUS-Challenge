@@ -74,6 +74,7 @@ const Registration = () => {
         console.log(url)
         axios.get(url)
         .then (response => {
+            console.log('fetched questions =',response.data.length)
             setQuestions(response.data)
         })
     }, []);

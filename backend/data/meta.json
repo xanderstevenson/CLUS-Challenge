@@ -59,15 +59,15 @@
 
     ],
     "cars": [
-        {  "number": 1, "ip" : "10.20.0.20", "color": "red", "speed": 500, "position": 0 },
-        {  "number": 2, "ip" : "10.20.0.20", "color": "blue","speed": 1000, "position": 0 },
-        {  "number": 3, "ip" : "10.20.0.20", "color": "yellow","speed": 500, "position": 0 },
-        {  "number": 4, "ip" : "10.20.0.20", "color": "green","speed": 500, "position": 0 }
+        {  "number": 1, "ip" : "10.20.0.11", "color": "Red", "speed": 1000, "position": 0 },
+        {  "number": 2, "ip" : "10.20.0.11", "color": "Blue","speed": 1000, "position": 0 },
+        {  "number": 3, "ip" : "10.20.0.11", "color": "Yellow","speed": 1000, "position": 0 },
+        {  "number": 4, "ip" : "10.20.0.11", "color": "Green","speed": 1000, "position": 0 }
     ],
     "env": [
         { "questions_to_generate": 5,
-          "car_simulation": true,
-          "database_url": "mongodb://devnet:ciscopsdt@10.194.239.243:27017/",
+          "car_simulation": 1,
+          "database_url": "mongodb://devnet:ciscopsdt@10.194.239.243:27017",
           "database_name": "devrel500",
           "car_url_template": "http://%s:8888/chittybang"
         }

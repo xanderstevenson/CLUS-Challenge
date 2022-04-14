@@ -1,14 +1,12 @@
-import re
 from fastapi import Request
 from fastapi import FastAPI, HTTPException
 from fastapi import status as statuscode
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from model import DemoQuestion, User, Car
-import httpx
+import re, httpx, json, socket, asyncio
 import pandas as pd
-import asyncio
-import json
+
 
 from database import (
     get_environment_vars,
@@ -28,10 +26,23 @@ from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 
+def get_ip():
+    s = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
+    try:
+        s.connect(('10.255.255.255',1))
+        IP=s.getsockname()[0]
+    except Exception:
+        IP='127.0.0.1'
+    finally:
+        s.close()
+    return IP
+
+# Allow requests from the same host where backend is deployed
+local_origin = f"http://%s:3000" % get_ip()
+
 origins = [
     "http://localhost:3000",
-    "http://sjds-kworker-a-1:3000",
-    "http://10.194.239.239:3000",
+    local_origin,
 ]
 
 app.add_middleware(
@@ -97,7 +108,6 @@ async def start_challenge(userid: str):
     raise HTTPException(404, f"Can't signal start of challenge for user {userid}")
 
 @app.put("/end",
-         response_model=Car,
          description="Signal end of the challenge and cleanup routine")
 async def end_challenge(userid: str):
     response = await end_the_challenge(userid)
@@ -108,18 +118,20 @@ async def end_challenge(userid: str):
         if( current_position > 0):
             weight = -1 * current_position
             (car_url,payload) = await get_car_payload('',car_id,weight)
-            if (payload is not None):
+            if ((payload is not None) and not environment_vars['car_simulation']):
                 print(f'Send cmd to car {car_url} with payload {payload}')
-                if( environment_vars['car_simulation'] is not True):
-                    data = json.loads(payload)
-                    async with httpx.AsyncClient() as client:
-                        resp = await client.post(car_url,json=data)
-                        if resp:
-                            print('Sending POST to car with status code = ',resp.status_code)
-                        else:
-                            raise HTTPException(404, f"Can't send command to reset to starting position for user {userid}")       
-        return response
+                data = json.loads(payload)
+                async with httpx.AsyncClient() as client:
+                    resp = await client.post(car_url,json=data)
+                    if resp:
+                        print('Sending POST to car with status code = ',resp.status_code)
+                        return resp.status_code
+                    else:
+                        raise HTTPException(404, f"Can't send command to reset to starting position for user {userid}")
+        return 200
+    
     raise HTTPException(404, f"Can't signal end of challenge for user {userid}")
+    return 404
 
 @app.put("/score",
         description="Actions taken after user answer a question correctly or incorrectly")
@@ -128,39 +140,38 @@ async def score_a_question(user_id: str, weight: int):
         otherwise, send weight as negative number.
     ''' 
     (car_url,payload) = await get_car_payload(user_id,0,weight)
-    if (payload is not None):
+    if ((payload is not None) and not environment_vars['car_simulation']):
         print(f'Send cmd to car {car_url} with payload {payload}')
         data = json.loads(payload)
         async with httpx.AsyncClient() as client:
-            if( environment_vars['car_simulation'] is not True):
-                response = await client.post(car_url,json=data)
-                print('Sending POST to car with status code = ',response.status_code)
-                if response:
-                    return response.status_code
-                else:
-                    raise HTTPException(404, f"Can't send command to car for user {user_id}")
+            response = await client.post(car_url,json=data) 
+            print('Sending POST to car with status code = ',response.status_code)
+            if response:
+                return response.status_code
+            else:
+                raise HTTPException(404, f"Can't send command to car for user {user_id}")
     return 200
         
 @app.put("/reset/{carid}",
-        description="Reset car position and make it avaialble for grab (if user quit mid-race)")
+        description="Reset car position and make it available for grab (if user quits mid-race)")
 async def reset_car(carid: int):
     current_position = await send_car_to_start_position(carid)
     print('Current car position is ',current_position)
     if current_position > 0:
         weight = -1 * current_position
         (car_url,payload) = await get_car_payload('',carid,weight)
-        if (payload is not None):
+        if ((payload is not None) and not environment_vars['car_simulation']):
             print(f'Send cmd to car {car_url} with payload {payload}')
-            if( environment_vars['car_simulation'] is not True):
-                data = json.loads(payload)
-                async with httpx.AsyncClient() as client:
-                    response = await client.post(car_url,json=data)
-                    print('Sending POST to car with status code = ',response.status_code)
-                    if response:
-                        return response.status_code
-                    else:
-                        raise HTTPException(404, f"Can't send command to reset car#{carid} to starting position")
-        return 200
+            data = json.loads(payload)
+            async with httpx.AsyncClient() as client:
+                response = await client.post(car_url,json=data)
+                print('Sending POST to car with status code = ',response.status_code)
+                if response:
+                    return response.status_code
+                else:
+                    raise HTTPException(404, f"Can't send command to reset car#{carid} to starting position")
+                    return 404
+        return 204
     return 200
 
 # Migrate code from Leaderboard project here for now. This should be done in ReactJS as a
