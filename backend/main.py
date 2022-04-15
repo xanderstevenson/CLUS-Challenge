@@ -6,7 +6,7 @@ from fastapi.templating import Jinja2Templates
 from model import DemoQuestion, User, Car
 import re, httpx, json, socket, asyncio
 import pandas as pd
-
+from utils import load_db
 
 from database import (
     get_environment_vars,
@@ -26,28 +26,9 @@ from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 
-def get_ip():
-    s = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
-    try:
-        s.connect(('10.255.255.255',1))
-        IP=s.getsockname()[0]
-    except Exception:
-        IP='127.0.0.1'
-    finally:
-        s.close()
-    return IP
-
-# Allow requests from the same host where backend is deployed
-local_origin = f"http://%s:3000" % get_ip()
-
-origins = [
-    "http://localhost:3000",
-    local_origin,
-]
-
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -173,6 +154,13 @@ async def reset_car(carid: int):
                     return 404
         return 204
     return 200
+
+@app.put("/loaddb",
+          description="Initialize question and car collections in the DB")
+async def loaddb():
+    return load_db()
+    
+          
 
 # Migrate code from Leaderboard project here for now. This should be done in ReactJS as a
 # frontend component.        

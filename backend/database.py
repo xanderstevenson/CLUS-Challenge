@@ -1,18 +1,16 @@
 import motor.motor_asyncio
 import os, random, json
 from model import DemoQuestion, User, Car
-from utils import get_time, get_uuid
+from utils import get_time, get_uuid, get_meta
 
 # Read environment variables from meta file
-META = './data/meta.json'
-with open(META) as f:
-    data = json.load(f)    
-environments_vars = data['env'][0]
+meta = get_meta()
+environments_vars = meta['env'][0]
 DB_CONNECT_URL              = environments_vars['database_url']
+DB_NAME                     = environments_vars['database_name']
 MAX_QUESTIONS_TO_GENERATE   = environments_vars['questions_to_generate']
 CAR_SIMULATION              = environments_vars['car_simulation']
 CAR_URL_TEMPLATE            = environments_vars['car_url_template']
-DB_NAME                     = environments_vars['database_name']
 
 try:
     print('Connecting to MongoDB...')
